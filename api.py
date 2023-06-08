@@ -31,7 +31,7 @@ class ConferenceScheduler():
                     self.country_dict[partner['country']][date] = []
 
             for date in self.country_dict[partner['country']]:
-                self.country_dict[partner['country']][date].append((partner['firstName'] + " " + partner['lastName'], partner['email']))
+                self.country_dict[partner['country']][date].append(partner['email'])
 
 
     def create_schedule(self):
@@ -48,6 +48,8 @@ class ConferenceScheduler():
 
             conference = Conference(country, start_date, attendee_count, final_attendees)
             self.conference_dict['Conferences'].append(conference.__dict__)
+        
+        print(self.conference_dict)
                 
     
     def post_schedule(self):
@@ -62,12 +64,12 @@ class ConferenceScheduler():
 
 class Conference():
     def __init__(self, country, start_date, attendee_count, attendees):
-        self.country = country
-        self.start_date = start_date
-        self.attendee_count = attendee_count
+        self.name = country
+        self.startDate = start_date
+        self.attendeeCount = attendee_count
         self.attendees = attendees 
 
-
+print('hello')
 conferences = ConferenceScheduler()
 conferences.create_schedule()
 conferences.post_schedule()
