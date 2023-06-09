@@ -1,5 +1,6 @@
 import requests 
 import requests_cache 
+from datetime import datetime 
 
 
 
@@ -26,12 +27,26 @@ class ConferenceScheduler():
 
         for partner in partners:
             self.country_dict[partner['country']] = self.country_dict.get(partner['country'], dict()) 
-            for date in partner['availableDates']:
-                if date not in self.country_dict[partner['country']]:
-                    self.country_dict[partner['country']][date] = []
+            for i in range(len(partner['availableDates'])-1):
+                datetime1 = datetime.strptime(partner['availableDates'][i], "%Y-%m-%d")
+                datetime2 = datetime.strptime(partner['availableDates'][i+1], "%Y-%m-%d")
+                difference = datetime2 - datetime1
+              
+                if difference.days == 1 and partner["availableDates"][i] not in self.country_dict[partner['country']]:
+                    self.country_dict[partner['country']][partner["availableDates"][i]] = [partner['email']]
+                elif difference.days == 1 and partner["availableDates"][i] in self.country_dict[partner['country']]:
+                    self.country_dict[partner['country']][partner["availableDates"][i]].append(partner['email'])
 
-            for date in self.country_dict[partner['country']]:
-                self.country_dict[partner['country']][date].append(partner['email'])
+
+            # for date in partner['availableDates']:
+            #     if date in self.country_dict[partner['country']]:
+            #         self.country_dict[partner['country']][date].append(partner['email'])
+
+            # for date in self.country_dict[partner['country']]:
+            #     print(date)
+                # self.country_dict[partner['country']][date].append(partner['email'])
+
+        # print(self.country_dict['United States'])
 
 
     def create_schedule(self):
@@ -54,7 +69,7 @@ class ConferenceScheduler():
     
     def post_schedule(self):
         
-        response = requests.post("https://backendassessmentv1.onrender.com/conference", data=self.conference_dict)
+        response = requests.post("https://backendassessmentv1.onrender.com/conference", self.conference_dict)
         
         if response.status_code == 200:
             print("Your POST was successful")
@@ -69,7 +84,7 @@ class Conference():
         self.attendeeCount = attendee_count
         self.attendees = attendees 
 
-print('hello')
+# print('hello')
 conferences = ConferenceScheduler()
 conferences.create_schedule()
 conferences.post_schedule()
