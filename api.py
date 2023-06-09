@@ -67,7 +67,7 @@ class ConferenceScheduler():
     
     def post_schedule(self):
         
-        response = requests.post("https://backendassessmentv1.onrender.com/conference", self.conference_dict)
+        response = requests.post("https://backendassessmentv1.onrender.com/conference", data=self.conference_dict)
         
         if response.status_code == 200:
             print("Your POST was successful")
