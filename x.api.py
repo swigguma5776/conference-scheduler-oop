@@ -8,21 +8,12 @@ requests_cache.install_cache(cache_name='github_cache', backend='sqlite', expire
 
 class ConferenceScheduler():
 
-    """
-    Class for Conference Scheduler API Assessment. The objective is to send an API GET request to the server, get back a collection of partners
-    who need to attend meeting within their respected countries. From the data the class must parse through and find attendees and start dates
-    for conferences in each country such that the number of attendees is maximized. The conference is a 2 day event so attendees must be able to
-    attend both days. Lastly, the class must build an invitation list data object and POST it to the same API. 
-    """
-
     def __init__(self):
         self.country_dict = {}
         self.conference_dict = {
             'Conferences': []
         }
         self.conference_api_call()
-        self.create_schedule()
-        self.post_schedule()
 
     def conference_api_call(self):
 
@@ -45,6 +36,17 @@ class ConferenceScheduler():
                     self.country_dict[partner['country']][partner["availableDates"][i]] = [partner['email']]
                 elif difference.days == 1 and partner["availableDates"][i] in self.country_dict[partner['country']]:
                     self.country_dict[partner['country']][partner["availableDates"][i]].append(partner['email'])
+
+
+            # for date in partner['availableDates']:
+            #     if date in self.country_dict[partner['country']]:
+            #         self.country_dict[partner['country']][date].append(partner['email'])
+
+            # for date in self.country_dict[partner['country']]:
+            #     print(date)
+                # self.country_dict[partner['country']][date].append(partner['email'])
+
+        # print(self.country_dict['United States'])
 
 
     def create_schedule(self):
@@ -84,5 +86,6 @@ class Conference():
 
 
 conferences = ConferenceScheduler()
-
+conferences.create_schedule()
+conferences.post_schedule()
 
